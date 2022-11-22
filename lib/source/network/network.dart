@@ -21,10 +21,22 @@ class MyNetwork {
   Future getTaskPerbaikanPerawatan(email) async {
     try {
       var url = Uri.parse(MyApi.getTaskPerbaikanPerawatan(email));
-      var response = await http.get(url, headers: {'Authorization': MyApi.token()});
+      var response =
+          await http.get(url, headers: {'Authorization': MyApi.token()});
       return response;
     } catch (e) {
       print("ERROR NETWORK perbaikan&perawatan: $e");
+    }
+  }
+
+  Future getTreeView(id_perbaikan) async {
+    try {
+      var url = Uri.parse(MyApi.getTreeView(id_perbaikan));
+      var response =
+          await http.get(url, headers: {'Authorization': MyApi.token()});
+      return response;
+    } catch (e) {
+      print("ERROR NETWORK treeview: $e");
     }
   }
 }

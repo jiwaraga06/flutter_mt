@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_mt/source/data/Auth/cubit/auth_cubit.dart';
 import 'package:flutter_mt/source/data/Perbaikan/cubit/perbaikan_cubit.dart';
+import 'package:flutter_mt/source/data/Perbaikan/cubit/save_perbaikan_cubit.dart';
+import 'package:flutter_mt/source/data/Perbaikan/cubit/tree_view_cubit.dart';
 import 'package:flutter_mt/source/network/network.dart';
 import 'package:flutter_mt/source/repository/repository.dart';
 import 'package:flutter_mt/source/router/router.dart';
@@ -28,6 +30,12 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (pebaikan) => PerbaikanCubit(myRepository: myRepository),
+        ),
+        BlocProvider(
+          create: (save_pebaikan) => SavePerbaikanCubit(),
+        ),
+        BlocProvider(
+          create: (tree_view) => TreeViewCubit(myRepository: myRepository),
         ),
       ],
       child: MaterialApp(
