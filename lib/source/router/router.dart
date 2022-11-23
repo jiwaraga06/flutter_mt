@@ -24,9 +24,9 @@ class RouterNavigation {
       case ADD_PERBAIKAN:
         return MaterialPageRoute(builder: (context) => const AddPerbaikan());
       case EDIT_PERBAIKAN:
-        return MaterialPageRoute(builder: (context) => const EditPerbaikan());
+        return MaterialPageRoute(settings: settings, builder: (context) => const EditPerbaikan());
       case INFO_MSN_PERBAIKAN:
-        return MaterialPageRoute(builder: (context) => const InfoMesinPerbaikan());
+        return MaterialPageRoute(settings: settings, builder: (context) => const InfoMesinPerbaikan());
       case RIWAYAT_PERBAIKAN:
         return MaterialPageRoute(builder: (context) => const RiwayatPerbaikan());
       case QR_PERBAIKAN:

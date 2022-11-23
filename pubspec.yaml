@@ -46,6 +46,8 @@ dependencies:
   awesome_snackbar_content: ^0.1.0
   floating_action_bubble: ^1.1.4
   flutter_treeview: ^1.0.7+1
+  flutter_rating_bar: ^4.0.1
+  pull_to_refresh: ^2.0.0
 
 dev_dependencies:
   flutter_test:

@@ -17,9 +17,9 @@ class TreeViewCubit extends Cubit<TreeViewState> {
     var id_perbaikan = pref.getString('id_perbaikan');
     myRepository!.getTreeView(id_perbaikan).then((value) {
       final json = value.body;
-      if (value.statusCode == 200) {
+      // if (value.statusCode == 200) {
         emit(TreeViewLoaded(json: json));
-      }
+      // }
         print("id_perbaikan: $id_perbaikan");
         // print("TreeView: $json");
     });

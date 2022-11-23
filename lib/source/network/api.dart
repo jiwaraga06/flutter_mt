@@ -16,4 +16,25 @@ class MyApi {
   static getTreeView(id_perbaikan) {
     return "$baseUrl/api/v1/mobile-app/mt/struktur-mesin?id=${id_perbaikan}";
   }
+  static getMaterial(id_perbaikan){
+    return "$baseUrl/api/v1/mobile-app/mt/material-mesin?id_mesin=${id_perbaikan}";
+  }
+  static getKetMesin(id_mesin){
+    return "$baseUrl/api/v1/mobile-app/mt/mesin?id_mesin=${id_mesin}";
+  }
+
+  // PERBAIKAN
+  static postPerbaikan(){
+    return "$baseUrl/api/v1/mobile-app/mt/penanganan-perbaikan";
+  }
+  static riwayat_perbaikan(email,page,per_page){
+    return "$baseUrl/api/v1/mobile-app/mt/history-perbaikan?email=${email}&page=$page&per_page=$per_page";
+  }
+  static mesin_history_perbaikan(id_mesin,page,per_page){
+    return "$baseUrl/api/v1/mobile-app/mt/mesin-history-perbaikan?id_mesin=2021030733&page=1&per_page=5";
+  }
+  // update perbaikan
+  static show_perbaikan(id_delegasi){
+    return "$baseUrl/api/v1/mobile-app/mt/show-perbaikan?id_delegasi=${id_delegasi}";
+  }
 }

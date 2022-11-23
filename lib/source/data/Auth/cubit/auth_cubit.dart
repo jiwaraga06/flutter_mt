@@ -21,7 +21,7 @@ class AuthCubit extends Cubit<AuthState> {
     if (email != null) {
       Navigator.pushNamedAndRemoveUntil(context, HOME, (route) => false);
     } else {
-    Navigator.pushNamedAndRemoveUntil(context, LOGIN, (route) => false);
+      Navigator.pushNamedAndRemoveUntil(context, LOGIN, (route) => false);
     }
   }
 
@@ -32,9 +32,10 @@ class AuthCubit extends Cubit<AuthState> {
       var json = jsonDecode(value.body);
       var statusCode = value.statusCode;
       print("JSON: $json");
+      print("Code: $statusCode");
+      emit(LoginLoaded(json: json, statusCode: statusCode));
       if (statusCode == 200) {
         pref.setString('email', json['email']);
-        emit(LoginLoaded(json: json, statusCode: statusCode));
         await Future.delayed(const Duration(seconds: 1));
         Navigator.pushNamedAndRemoveUntil(context, HOME, (route) => false);
       }
