@@ -15,7 +15,8 @@ class SavePerbaikanCubit extends Cubit<SavePerbaikanState> {
     emit(SavePerbaikanLoad(id_perbaikan, kode_penugasan, email, tgl_penugasan, nama_lokasi, nama_mesin));
     pref.setString("id_perbaikan", id_perbaikan);
   }
-void postPerbaikan(id_delegasi, detail_perbaikan) async {
+
+  void postPerbaikan(id_delegasi, detail_perbaikan) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     var email = pref.getString("email");
     var body = {
