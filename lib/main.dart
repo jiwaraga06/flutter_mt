@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_mt/source/data/Auth/cubit/auth_cubit.dart';
+import 'package:flutter_mt/source/data/Mesin/cubit/ket_mesin_cubit.dart';
+import 'package:flutter_mt/source/data/Perbaikan/cubit/material_cubit.dart';
+import 'package:flutter_mt/source/data/Perbaikan/cubit/mesin_history_perbaikan_cubit.dart';
 import 'package:flutter_mt/source/data/Perbaikan/cubit/perbaikan_cubit.dart';
+import 'package:flutter_mt/source/data/Perbaikan/cubit/post_perbaikan_cubit.dart';
+import 'package:flutter_mt/source/data/Perbaikan/cubit/riwayat_perbaikan_cubit.dart';
+import 'package:flutter_mt/source/data/Perbaikan/cubit/save_perbaikan_cubit.dart';
+import 'package:flutter_mt/source/data/Perbaikan/cubit/tree_view_cubit.dart';
 import 'package:flutter_mt/source/network/network.dart';
 import 'package:flutter_mt/source/repository/repository.dart';
 import 'package:flutter_mt/source/router/router.dart';
@@ -28,6 +35,27 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (pebaikan) => PerbaikanCubit(myRepository: myRepository),
+        ),
+        BlocProvider(
+          create: (save_pebaikan) => SavePerbaikanCubit(),
+        ),
+        BlocProvider(
+          create: (tree_view) => TreeViewCubit(myRepository: myRepository),
+        ),
+        BlocProvider(
+          create: (material) => MaterialCubit(myRepository: myRepository),
+        ),
+        BlocProvider(
+          create: (post_perbaikan) => PostPerbaikanCubit(myRepository: myRepository),
+        ),
+        BlocProvider(
+          create: (riwayat_perbaikan) => RiwayatPerbaikanCubit(myRepository: myRepository),
+        ),
+        BlocProvider(
+          create: (ket_mesin) => KetMesinCubit(myRepository: myRepository),
+        ),
+        BlocProvider(
+          create: (ket_mesin) => MesinHistoryPerbaikanCubit(myRepository: myRepository),
         ),
       ],
       child: MaterialApp(
