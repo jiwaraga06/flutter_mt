@@ -28,9 +28,26 @@ class MyApi {
     return "$baseUrl/api/v1/mobile-app/mt/penanganan-perbaikan";
   }
   static riwayat_perbaikan(email,page,per_page){
-    return "$baseUrl/api/v1/mobile-app/mt/history-perbaikan?email=aldi.gusmildan@sipatex.co.id&page=1&per_page=2";
+    return "$baseUrl/api/v1/mobile-app/mt/history-perbaikan?email=${email}&page=$page&per_page=$per_page";
   }
   static mesin_history_perbaikan(id_mesin,page,per_page){
     return "$baseUrl/api/v1/mobile-app/mt/mesin-history-perbaikan?id_mesin=2021030733&page=1&per_page=5";
+  }
+  // update perbaikan
+  static show_perbaikan(id_delegasi){
+    return "$baseUrl/api/v1/mobile-app/mt/show-perbaikan?id_delegasi=${id_delegasi}";
+  }
+  // PERAWATAN
+  static detail_task_perawatan(id_delegasi){
+    return "$baseUrl/api/v1/mobile-app/mt/detail-task-perawatan?id_delegasi=$id_delegasi";
+  }
+  static postPerawatan(){
+    return "$baseUrl/api/v1/mobile-app/mt/penanganan-perawatan";
+  }
+  static reviewPerawatan(id_delegasi){
+    return "$baseUrl/api/v1/mobile-app/mt/review-perawatan?id_delegasi=$id_delegasi";
+  }
+  static showPerawatan(id_delegasi){
+    return "$baseUrl/api/v1/mobile-app/mt/show-perawatan?id_delegasi=$id_delegasi";
   }
 }

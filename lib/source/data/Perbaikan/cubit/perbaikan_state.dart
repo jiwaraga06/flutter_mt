@@ -9,5 +9,6 @@ class PerbaikanLoading extends PerbaikanState {}
 
 class PerbaikanLoaded extends PerbaikanState {
   dynamic json;
-  PerbaikanLoaded({this.json});
+  final int? statusCode;
+  PerbaikanLoaded({this.json, this.statusCode});
 }

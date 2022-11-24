@@ -5,21 +5,20 @@ import 'package:flutter_mt/source/repository/repository.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-part 'perbaikan_state.dart';
+part 'perawatan_state.dart';
 
-class PerbaikanCubit extends Cubit<PerbaikanState> {
+class PerawatanCubit extends Cubit<PerawatanState> {
   final MyRepository? myRepository;
-  PerbaikanCubit({required this.myRepository}) : super(PerbaikanInitial());
-
-  void getPerbaikan() async {
-    emit(PerbaikanLoading());
+  PerawatanCubit({required this.myRepository}) : super(PerawatanInitial());
+  void getPerawatan() async {
+    emit(PerawatanLoading());
     SharedPreferences pref = await SharedPreferences.getInstance();
     var email = pref.getString('email');
     myRepository!.getTaskPerbaikanPerawatan(email).then((value) {
       var json = jsonDecode(value.body);
       print("TaskList: $json");
       print("TaskList Code: ${value.statusCode}");
-      emit(PerbaikanLoaded(json: json, statusCode: value.statusCode));
+      emit(PerawatanLoaded(json: json, statusCode: value.statusCode));
     });
   }
 }

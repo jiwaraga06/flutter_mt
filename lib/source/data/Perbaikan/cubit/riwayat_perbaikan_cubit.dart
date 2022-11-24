@@ -16,10 +16,10 @@ class RiwayatPerbaikanCubit extends Cubit<RiwayatPerbaikanState> {
     emit(RiwayatPerbaikanLoading());
     SharedPreferences pref = await SharedPreferences.getInstance();
     var email = pref.getString("email");
-    myRepository!.getRiwayatPerbaikan(email, 1, 1).then((value) {
+    myRepository!.getRiwayatPerbaikan(email, 1, 2).then((value) {
       var json = jsonDecode(value.body);
       print('Status: ${value.statusCode}');
-      print('Json: $json');
+      print('Jsonss: $json');
       if(value.statusCode ==200){
         emit(RiwayatPerbaikanLoaded(json: json));
       }

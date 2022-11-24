@@ -127,7 +127,7 @@ class _AddPerbaikanState extends State<AddPerbaikan> {
         ],
       ),
       body: BlocListener<PostPerbaikanCubit, PostPerbaikanState>(
-        listener: (context, state) {
+        listener: (context, state) async{
           if (state is PostPerbaikanLoading) {
             showDialog(
                 context: context,
@@ -145,6 +145,8 @@ class _AddPerbaikanState extends State<AddPerbaikan> {
               ScaffoldMessenger.of(context)
                 ..hideCurrentMaterialBanner()
                 ..showSnackBar(materialBanner);
+                await Future.delayed(Duration(seconds: 1));
+                Navigator.of(context).pop();
             } else {
               final materialBanner = MyBanner.bannerFailed(json['message']);
               ScaffoldMessenger.of(context)
@@ -162,7 +164,7 @@ class _AddPerbaikanState extends State<AddPerbaikan> {
                     builder: (context, state) {
                       if (state is SavePerbaikanLoad == false) {
                         return Container(
-                          child: Text("Data"),
+                          child: Text("Data False"),
                         );
                       }
                       var data = (state as SavePerbaikanLoad);

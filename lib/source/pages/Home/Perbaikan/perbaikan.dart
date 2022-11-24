@@ -9,7 +9,9 @@ import 'package:flutter_mt/source/data/Perbaikan/cubit/save_perbaikan_cubit.dart
 import 'package:flutter_mt/source/router/string.dart';
 import 'package:flutter_mt/source/widget/custom_banner.dart';
 import 'package:flutter_mt/source/widget/custom_button3.dart';
+import 'package:flutter_mt/source/widget/custom_button4.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class Perbaikan extends StatefulWidget {
   const Perbaikan({super.key});
@@ -22,7 +24,8 @@ class _PerbaikanState extends State<Perbaikan> with SingleTickerProviderStateMix
   Animation<double>? _animation;
   AnimationController? _animationController;
   bool isOpen = false;
-  Future<void> scanQR(id_mesin, kode_penugasan, tgl_penugasan, nama_lokasi, nama_mesin) async {
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
+  Future<void> scanQR(id_mesin, kode_penugasan, tgl_penugasan, nama_lokasi, nama_mesin, status_delegasi) async {
     String barcodeScanRes;
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode('#ff6666', 'Cancel', true, ScanMode.QR);
@@ -40,7 +43,11 @@ class _PerbaikanState extends State<Perbaikan> with SingleTickerProviderStateMix
           ..hideCurrentMaterialBanner()
           ..showSnackBar(materialBanner);
         await Future.delayed(Duration(seconds: 1));
-        Navigator.pushNamed(context, ADD_PERBAIKAN);
+        if (status_delegasi == 0) {
+          Navigator.pushNamed(context, ADD_PERBAIKAN);
+        } else {
+          Navigator.pushNamed(context, EDIT_PERBAIKAN, arguments: {'id_perbaikan': id_mesin, 'id_delegasi': kode_penugasan});
+        }
       } else {
         final materialBanner = MyBanner.bannerFailed("ID Mesin Tidak Sama");
         ScaffoldMessenger.of(context)
@@ -126,209 +133,230 @@ class _PerbaikanState extends State<Perbaikan> with SingleTickerProviderStateMix
             );
           }
           var data = (state as PerbaikanLoaded).json;
+          var statusCode = (state as PerbaikanLoaded).statusCode;
           if (data.isEmpty) {
             return Container(
+              alignment: Alignment.center,
               child: Text("Data kosong"),
             );
           }
-          return ListView.builder(
-              itemCount: data.length,
-              itemBuilder: (BuildContext context, int index) {
-                var perbaikan = data[index];
-                return Container(
-                  margin: const EdgeInsets.all(8.0),
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8.0), boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      blurRadius: 1.3,
-                      spreadRadius: 1.3,
-                      offset: Offset(1, 3),
+          return SmartRefresher(
+            controller: _refreshController,
+            onRefresh: () {
+              BlocProvider.of<PerbaikanCubit>(context).getPerbaikan();
+            },
+            child: ListView.builder(
+                itemCount: data['perbaikan'].length,
+                itemBuilder: (BuildContext context, int index) {
+                  var perbaikan = data['perbaikan'][index];
+                  return Container(
+                    margin: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8.0), boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        blurRadius: 1.3,
+                        spreadRadius: 1.3,
+                        offset: Offset(1, 3),
+                      ),
+                    ]),
+                    child: Column(
+                      children: [
+                        Table(
+                          columnWidths: const {
+                            0: FixedColumnWidth(150),
+                            1: FixedColumnWidth(20),
+                            // 2: FixedColumnWidth(100),
+                          },
+                          children: [
+                            TableRow(
+                              children: [
+                                // Icon(FontAwesomeIcons.folder),
+                                Text(
+                                  " Kode Penugasan",
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                ),
+                                Text(
+                                  ":",
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                ),
+                                Text(
+                                  perbaikan['id'].toString(),
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                              ],
+                            ),
+                            TableRow(
+                              children: [
+                                // Icon(FontAwesomeIcons.folder),
+                                Text(
+                                  " Tanggal Penugasan",
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                ),
+                                Text(
+                                  ":",
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                ),
+                                Text(perbaikan['tgl_delegasi'], style: TextStyle(fontSize: 15)),
+                              ],
+                            ),
+                            TableRow(
+                              children: [
+                                // Icon(FontAwesomeIcons.folder),
+                                Text(
+                                  " Estimasi Selesai",
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                ),
+                                Text(
+                                  ":",
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                ),
+                                Text(perbaikan['estimasi_tgl_selesai_perbaikan'], style: TextStyle(fontSize: 15)),
+                              ],
+                            ),
+                            TableRow(
+                              children: [
+                                // Icon(FontAwesomeIcons.folder),
+                                Text(
+                                  " ID Mesin",
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                ),
+                                Text(
+                                  ":",
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                ),
+                                Text(perbaikan['id_mesin'].toString(), style: TextStyle(fontSize: 15)),
+                              ],
+                            ),
+                            TableRow(
+                              children: [
+                                // Icon(FontAwesomeIcons.folder),
+                                Text(
+                                  " Lokasi",
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                ),
+                                Text(
+                                  ":",
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                ),
+                                Text(perbaikan['nama_lokasi'].toString(), style: TextStyle(fontSize: 15)),
+                              ],
+                            ),
+                            TableRow(
+                              children: [
+                                // Icon(FontAwesomeIcons.folder),
+                                Text(
+                                  " Mesin",
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                ),
+                                Text(
+                                  ":",
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                ),
+                                Text(perbaikan['nama_mesin'].toString(), style: TextStyle(fontSize: 15)),
+                              ],
+                            ),
+                            TableRow(
+                              children: [
+                                // Icon(FontAwesomeIcons.folder),
+                                Text(
+                                  " Group Maintainer",
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                ),
+                                Text(
+                                  ":",
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                ),
+                                Text(perbaikan['nama_group'].toString(), style: TextStyle(fontSize: 15)),
+                              ],
+                            ),
+                            TableRow(
+                              children: [
+                                // Icon(FontAwesomeIcons.folder),
+                                Text(
+                                  " Maintainer Member",
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                ),
+                                Text(
+                                  ":",
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                ),
+                                Text(perbaikan['maintenance'].toString(), style: TextStyle(fontSize: 15)),
+                              ],
+                            ),
+                            TableRow(
+                              children: [
+                                // Icon(FontAwesomeIcons.folder),
+                                Text(
+                                  " Catatan Supervisor",
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                ),
+                                Text(
+                                  ":",
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                ),
+                                Text(perbaikan['catatan'].toString(), style: TextStyle(fontSize: 15)),
+                              ],
+                            ),
+                            TableRow(
+                              children: [
+                                // Icon(FontAwesomeIcons.folder),
+                                Text(
+                                  " Keterangan",
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                ),
+                                Text(
+                                  ":",
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                ),
+                                Text(perbaikan['keterangan_permintaan'].toString(), style: TextStyle(fontSize: 15)),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20.0),
+                        perbaikan['status_delegasi'] == 3
+                            ? CustomButton4(
+                                text: "Sudah di Close",
+                                color: Colors.red[600],
+                                onPressed: () {},
+                                icon: Icon(
+                                  FontAwesomeIcons.close,
+                                  color: Colors.red[600],
+                                ))
+                            : CustomButton3(
+                                onPressed: perbaikan['status_delegasi'] == 1
+                                    ? () {}
+                                    : () {
+                                        scanQR("${perbaikan['id_mesin']}", "${perbaikan['id']}", "${perbaikan['tgl_delegasi']}", "${perbaikan['nama_lokasi']}",
+                                            "${perbaikan['nama_mesin']}", perbaikan['status_delegasi']);
+                                      },
+                                text: perbaikan['status_delegasi'] == 1 ? "Dalam Review" : "Quick Scan",
+                                icon: perbaikan['status_delegasi'] == 1
+                                    ? Icon(
+                                        FontAwesomeIcons.magnifyingGlass,
+                                        color: Colors.blue,
+                                      )
+                                    : Icon(
+                                        FontAwesomeIcons.qrcode,
+                                        color: Colors.blue,
+                                      ),
+                              ),
+                        perbaikan['status_delegasi'] == 2
+                            ? CustomButton4(
+                                text: "Lihat Review",
+                                color: Colors.orange[600],
+                                onPressed: () {},
+                                icon: Icon(
+                                  FontAwesomeIcons.info,
+                                  color: Colors.orange[600],
+                                ))
+                            : SizedBox.shrink()
+                      ],
                     ),
-                  ]),
-                  child: Column(
-                    children: [
-                      Table(
-                        columnWidths: {
-                          0: FixedColumnWidth(150),
-                          1: FixedColumnWidth(20),
-                          // 2: FixedColumnWidth(100),
-                        },
-                        children: [
-                          TableRow(
-                            children: [
-                              // Icon(FontAwesomeIcons.folder),
-                              Text(
-                                " Kode Penugasan",
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                              ),
-                              Text(
-                                ":",
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                              ),
-                              Text(
-                                perbaikan['id'].toString(),
-                                style: TextStyle(fontSize: 15),
-                              ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              // Icon(FontAwesomeIcons.folder),
-                              Text(
-                                " Tanggal Penugasan",
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                              ),
-                              Text(
-                                ":",
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                              ),
-                              Text(perbaikan['tgl_delegasi'], style: TextStyle(fontSize: 15)),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              // Icon(FontAwesomeIcons.folder),
-                              Text(
-                                " Estimasi Selesai",
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                              ),
-                              Text(
-                                ":",
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                              ),
-                              Text(perbaikan['estimasi_tgl_selesai_perbaikan'], style: TextStyle(fontSize: 15)),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              // Icon(FontAwesomeIcons.folder),
-                              Text(
-                                " ID Mesin",
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                              ),
-                              Text(
-                                ":",
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                              ),
-                              Text(perbaikan['id_mesin'].toString(), style: TextStyle(fontSize: 15)),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              // Icon(FontAwesomeIcons.folder),
-                              Text(
-                                " Lokasi",
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                              ),
-                              Text(
-                                ":",
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                              ),
-                              Text(perbaikan['nama_lokasi'].toString(), style: TextStyle(fontSize: 15)),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              // Icon(FontAwesomeIcons.folder),
-                              Text(
-                                " Mesin",
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                              ),
-                              Text(
-                                ":",
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                              ),
-                              Text(perbaikan['nama_mesin'].toString(), style: TextStyle(fontSize: 15)),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              // Icon(FontAwesomeIcons.folder),
-                              Text(
-                                " Group Maintainer",
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                              ),
-                              Text(
-                                ":",
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                              ),
-                              Text(perbaikan['nama_group'].toString(), style: TextStyle(fontSize: 15)),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              // Icon(FontAwesomeIcons.folder),
-                              Text(
-                                " Maintainer Member",
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                              ),
-                              Text(
-                                ":",
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                              ),
-                              Text(perbaikan['maintenance'].toString(), style: TextStyle(fontSize: 15)),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              // Icon(FontAwesomeIcons.folder),
-                              Text(
-                                " Catatan Supervisor",
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                              ),
-                              Text(
-                                ":",
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                              ),
-                              Text(perbaikan['catatan'].toString(), style: TextStyle(fontSize: 15)),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              // Icon(FontAwesomeIcons.folder),
-                              Text(
-                                " Keterangan",
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                              ),
-                              Text(
-                                ":",
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                              ),
-                              Text(perbaikan['keterangan_permintaan'].toString(), style: TextStyle(fontSize: 15)),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20.0),
-                      CustomButton3(
-                        onPressed: perbaikan['status_delegasi'] == 1
-                            ? () {}
-                            : () {
-                                // Navigator.pushNamed(context, QR_PERBAIKAN, arguments: {'id_mesin': perbaikan['id_mesin']});
-                                scanQR(
-                                  "${perbaikan['id_mesin']}",
-                                  "${perbaikan['id']}",
-                                  "${perbaikan['tgl_delegasi']}",
-                                  "${perbaikan['nama_lokasi']}",
-                                  "${perbaikan['nama_mesin']}",
-                                );
-                              },
-                        text: perbaikan['status_delegasi'] == 1 ? "Dalam Review" : "Quick Scan",
-                        icon: perbaikan['status_delegasi'] == 1
-                            ? Icon(
-                                FontAwesomeIcons.magnifyingGlass,
-                                color: Colors.blue,
-                              )
-                            : Icon(
-                                FontAwesomeIcons.qrcode,
-                                color: Colors.blue,
-                              ),
-                      ),
-                    ],
-                  ),
-                );
-              });
+                  );
+                }),
+          );
         },
       ),
     );

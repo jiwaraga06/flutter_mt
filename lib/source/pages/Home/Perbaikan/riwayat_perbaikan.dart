@@ -28,6 +28,7 @@ class _RiwayatPerbaikanState extends State<RiwayatPerbaikan> {
           var data = (state as RiwayatPerbaikanLoaded).json;
           if (data.isEmpty) {
             return Container(
+              alignment: Alignment.center,
               child: Text("Data Kosong"),
             );
           }

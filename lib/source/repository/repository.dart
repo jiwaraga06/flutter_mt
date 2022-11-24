@@ -43,6 +43,10 @@ class MyRepository {
     var json = await myNetwork!.postPerbaikan(body);
     return json;
   }
+  Future editPerbaikan(body) async {
+    var json = await myNetwork!.editPerbaikan(body);
+    return json;
+  }
 
   Future getRiwayatPerbaikan(email, page, per_page) async {
     var json = await myNetwork!.getRiwayatPerbaikan(email, page, per_page);
@@ -51,6 +55,25 @@ class MyRepository {
 
   Future getMesinHistoryPerbaikan(id_mesin, page, per_page) async {
     var json = await myNetwork!.getMesinHistoryPerbaikan(id_mesin, page, per_page);
+    return json;
+  }
+
+  Future getShowPerbaikan(id_delegasi)async {
+    var json = await myNetwork!.getShowPerbaikan(id_delegasi);
+    return json;
+  }
+
+  Future getDetailTaskPerawatan(id_delegasi) async {
+    var json = await myNetwork!.getDetailTaskPerawatan(id_delegasi);
+    return json;
+  }
+
+  Future postPerawatan(body)async {
+    var json = await myNetwork!.postPerawatan(body);
+    return json;
+  }
+  Future editPerawatan(body)async {
+    var json = await myNetwork!.editPerawatan(body);
     return json;
   }
 }
