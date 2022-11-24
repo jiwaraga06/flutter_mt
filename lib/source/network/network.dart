@@ -23,7 +23,8 @@ class MyNetwork {
   Future getTaskPerbaikanPerawatan(email) async {
     try {
       var url = Uri.parse(MyApi.getTaskPerbaikanPerawatan(email));
-      var response = await http.get(url, headers: {'Authorization': MyApi.token()});
+      var response =
+          await http.get(url, headers: {'Authorization': MyApi.token()});
       return response;
     } catch (e) {
       print("ERROR NETWORK perbaikan&perawatan: $e");
@@ -33,7 +34,8 @@ class MyNetwork {
   Future getTreeView(id_perbaikan) async {
     try {
       var url = Uri.parse(MyApi.getTreeView(id_perbaikan));
-      var response = await http.get(url, headers: {'Authorization': MyApi.token()});
+      var response =
+          await http.get(url, headers: {'Authorization': MyApi.token()});
       return response;
     } catch (e) {
       print("ERROR NETWORK treeview: $e");
@@ -43,7 +45,8 @@ class MyNetwork {
   Future getMaterial(id_perbaikan) async {
     try {
       var url = Uri.parse(MyApi.getMaterial(id_perbaikan));
-      var response = await http.get(url, headers: {'Authorization': MyApi.token()});
+      var response =
+          await http.get(url, headers: {'Authorization': MyApi.token()});
       return response;
     } catch (e) {
       print("ERROR NETWORK material: $e");
@@ -109,7 +112,8 @@ class MyNetwork {
 
   Future getMesinHistoryPerbaikan(id_mesin, page, per_page) async {
     try {
-      var url = Uri.parse(MyApi.mesin_history_perbaikan(id_mesin, page, per_page));
+      var url =
+          Uri.parse(MyApi.mesin_history_perbaikan(id_mesin, page, per_page));
       var response = await http.get(
         url,
         headers: {'Authorization': MyApi.token(), 'Accept': 'application/json'},

@@ -47,8 +47,15 @@ dependencies:
   floating_action_bubble: ^1.1.4
   flutter_treeview: ^1.0.7+1
   flutter_rating_bar: ^4.0.1
+
   pull_to_refresh: ^2.0.0
   multi_select_flutter: ^4.1.2
+
+
+  pull_to_refresh: ^2.0.0
+
+>>>>>>> a7e4902c2a7ab316116d481a8c58cf75cd227fd1
+>>>>>>> 3d5f6c22ce42e3f07423f93423734c9837972ace
 
 dev_dependencies:
   flutter_test:

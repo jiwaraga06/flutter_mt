@@ -20,7 +20,8 @@ class Perbaikan extends StatefulWidget {
   State<Perbaikan> createState() => _PerbaikanState();
 }
 
-class _PerbaikanState extends State<Perbaikan> with SingleTickerProviderStateMixin {
+class _PerbaikanState extends State<Perbaikan>
+    with SingleTickerProviderStateMixin {
   Animation<double>? _animation;
   AnimationController? _animationController;
   bool isOpen = false;
@@ -28,7 +29,8 @@ class _PerbaikanState extends State<Perbaikan> with SingleTickerProviderStateMix
   Future<void> scanQR(id_mesin, kode_penugasan, tgl_penugasan, nama_lokasi, nama_mesin, status_delegasi) async {
     String barcodeScanRes;
     try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode('#ff6666', 'Cancel', true, ScanMode.QR);
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          '#ff6666', 'Cancel', true, ScanMode.QR);
       print(barcodeScanRes);
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
@@ -37,7 +39,8 @@ class _PerbaikanState extends State<Perbaikan> with SingleTickerProviderStateMix
     print(barcodeScanRes);
     if (barcodeScanRes != '-1') {
       if (id_mesin.toString() == barcodeScanRes) {
-        BlocProvider.of<SavePerbaikanCubit>(context).save(barcodeScanRes, kode_penugasan, tgl_penugasan, nama_lokasi, nama_mesin);
+        BlocProvider.of<SavePerbaikanCubit>(context).save(barcodeScanRes,
+            kode_penugasan, tgl_penugasan, nama_lokasi, nama_mesin);
         final materialBanner = MyBanner.bannerSuccess("ID Mesin Sama");
         ScaffoldMessenger.of(context)
           ..hideCurrentMaterialBanner()
@@ -60,7 +63,8 @@ class _PerbaikanState extends State<Perbaikan> with SingleTickerProviderStateMix
   Future<void> qrInfoMesin() async {
     String barcodeScanRes;
     try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode('#ff6666', 'Cancel', true, ScanMode.QR);
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          '#ff6666', 'Cancel', true, ScanMode.QR);
       print(barcodeScanRes);
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
@@ -68,7 +72,8 @@ class _PerbaikanState extends State<Perbaikan> with SingleTickerProviderStateMix
     if (!mounted) return;
     print(barcodeScanRes);
     if (barcodeScanRes != '-1') {
-      Navigator.pushNamed(context, INFO_MSN_PERBAIKAN, arguments: {'id_mesin': '$barcodeScanRes'});
+      Navigator.pushNamed(context, INFO_MSN_PERBAIKAN,
+          arguments: {'id_mesin': '$barcodeScanRes'});
     }
   }
 
@@ -80,7 +85,8 @@ class _PerbaikanState extends State<Perbaikan> with SingleTickerProviderStateMix
       duration: Duration(milliseconds: 260),
     );
 
-    final curvedAnimation = CurvedAnimation(curve: Curves.easeOut, parent: _animationController!);
+    final curvedAnimation =
+        CurvedAnimation(curve: Curves.easeOut, parent: _animationController!);
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
     BlocProvider.of<PerbaikanCubit>(context).getPerbaikan();
   }
@@ -90,7 +96,9 @@ class _PerbaikanState extends State<Perbaikan> with SingleTickerProviderStateMix
     return Scaffold(
       floatingActionButton: FloatingActionBubble(
         onPress: () {
-          _animationController!.isCompleted ? _animationController!.reverse() : _animationController!.forward();
+          _animationController!.isCompleted
+              ? _animationController!.reverse()
+              : _animationController!.forward();
           setState(() {
             isOpen = !isOpen;
           });
