@@ -11,7 +11,6 @@ class SavePerawatanCubit extends Cubit<SavePerawatanState> {
     var email = pref.getString('email');
     pref.setString('kode_penugasan',kode_penugasan);
     emit(SavePerawatanLoaded(
-      email: email,
       id_perbaikan: id_perbaikan,
       kode_penugasan: kode_penugasan,
       tgl_penugasan: tgl_penugasan,

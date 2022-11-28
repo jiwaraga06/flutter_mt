@@ -53,6 +53,11 @@ class _AddPerbaikanState extends State<AddPerbaikan> {
           tabels.remove(tabel);
           selectedtabel.remove(tabel);
         }
+        SnackBar snackBar = SnackBar(
+          backgroundColor: Colors.red[700],
+          content: Text('Berhasil Hapus Kolom'),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     });
   }
@@ -63,6 +68,11 @@ class _AddPerbaikanState extends State<AddPerbaikan> {
     table.nama = isiTreeView;
     tabels.add(table);
     print('MyTable: $tabels');
+    const snackBar = SnackBar(
+      backgroundColor: Colors.green,
+      content: Text('Berhasil Menambahkan Kolom'),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
     setState(() {});
   }
 
@@ -127,7 +137,7 @@ class _AddPerbaikanState extends State<AddPerbaikan> {
         ],
       ),
       body: BlocListener<PostPerbaikanCubit, PostPerbaikanState>(
-        listener: (context, state) async{
+        listener: (context, state) async {
           if (state is PostPerbaikanLoading) {
             showDialog(
                 context: context,
@@ -136,17 +146,17 @@ class _AddPerbaikanState extends State<AddPerbaikan> {
                   return const CustomLoading();
                 });
           }
-          if(state is PostPerbaikanLoaded){
+          if (state is PostPerbaikanLoaded) {
             Navigator.of(context).pop();
-             var json = state.json;
+            var json = state.json;
             var statusCode = state.statusCode;
             if (statusCode == 200) {
               final materialBanner = MyBanner.bannerSuccess(json['message']);
               ScaffoldMessenger.of(context)
                 ..hideCurrentMaterialBanner()
                 ..showSnackBar(materialBanner);
-                await Future.delayed(Duration(seconds: 1));
-                Navigator.of(context).pop();
+              await Future.delayed(Duration(seconds: 1));
+              Navigator.of(context).pop();
             } else {
               final materialBanner = MyBanner.bannerFailed(json['message']);
               ScaffoldMessenger.of(context)

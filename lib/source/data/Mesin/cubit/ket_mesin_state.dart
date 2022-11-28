@@ -9,6 +9,7 @@ class KetMesinLoading extends KetMesinState {}
 
 class KetMesinLoaded extends KetMesinState {
   int? statusCode;
+  int? isAdd;
   dynamic json;
-  KetMesinLoaded({this.json, this.statusCode});
+  KetMesinLoaded({this.json, this.statusCode, this.isAdd});
 }

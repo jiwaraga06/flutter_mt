@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mt/source/pages/Home/Perawatan/perawatan.dart';
 import 'package:flutter_mt/source/pages/Home/Perbaikan/perbaikan.dart';
+import 'package:flutter_mt/source/router/string.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MyTabBar extends StatefulWidget {
   const MyTabBar({super.key});
@@ -52,6 +54,11 @@ class MyTabBarState extends State<MyTabBar> with SingleTickerProviderStateMixin 
             ),
           ),
         ]),
+        actions: [
+          IconButton(onPressed: (){
+            Navigator.pushNamed(context, PROFILE);
+          }, icon: Icon(FontAwesomeIcons.user)),
+        ],
       ),
       body: TabBarView(
         controller: controller,

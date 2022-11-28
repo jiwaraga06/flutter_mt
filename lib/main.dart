@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_mt/source/data/Auth/cubit/auth_cubit.dart';
+import 'package:flutter_mt/source/data/Auth/cubit/profile_cubit.dart';
 import 'package:flutter_mt/source/data/Mesin/cubit/ket_mesin_cubit.dart';
 import 'package:flutter_mt/source/data/Perawatan/Edit/cubit/edit_detail_task_perawatan_cubit.dart';
 import 'package:flutter_mt/source/data/Perawatan/Edit/cubit/edit_perawatan_cubit.dart';
 import 'package:flutter_mt/source/data/Perawatan/cubit/detail_task_perawatan_cubit.dart';
+import 'package:flutter_mt/source/data/Perawatan/cubit/mesin_history_perawatan_cubit.dart';
 import 'package:flutter_mt/source/data/Perawatan/cubit/perawatan_cubit.dart';
 import 'package:flutter_mt/source/data/Perawatan/cubit/post_perawatan_cubit.dart';
+import 'package:flutter_mt/source/data/Perawatan/cubit/review_perawatan_cubit.dart';
+import 'package:flutter_mt/source/data/Perawatan/cubit/riwayat_perawatan_cubit.dart';
 import 'package:flutter_mt/source/data/Perawatan/cubit/save_perawatan_cubit.dart';
 import 'package:flutter_mt/source/data/Perbaikan/Edit/cubit/edit_perbaikan_cubit.dart';
 import 'package:flutter_mt/source/data/Perbaikan/Edit/cubit/save_edit_perbaikan_cubit.dart';
+import 'package:flutter_mt/source/data/Perbaikan/cubit/detail_riwayat_perbaikan_cubit.dart';
 import 'package:flutter_mt/source/data/Perbaikan/cubit/material_cubit.dart';
 import 'package:flutter_mt/source/data/Perbaikan/cubit/mesin_history_perbaikan_cubit.dart';
 import 'package:flutter_mt/source/data/Perbaikan/cubit/perbaikan_cubit.dart';
 import 'package:flutter_mt/source/data/Perbaikan/cubit/post_perbaikan_cubit.dart';
+import 'package:flutter_mt/source/data/Perbaikan/cubit/review_perbaikan_cubit.dart';
 import 'package:flutter_mt/source/data/Perbaikan/cubit/riwayat_perbaikan_cubit.dart';
 import 'package:flutter_mt/source/data/Perbaikan/cubit/save_perbaikan_cubit.dart';
 import 'package:flutter_mt/source/data/Perbaikan/cubit/tree_view_cubit.dart';
@@ -42,6 +48,9 @@ class MyApp extends StatelessWidget {
           create: (auth) => AuthCubit(myRepository: myRepository),
         ),
         BlocProvider(
+          create: (profile) => ProfileCubit(myRepository: myRepository),
+        ),
+        BlocProvider(
           create: (pebaikan) => PerbaikanCubit(myRepository: myRepository),
         ),
         BlocProvider(
@@ -57,7 +66,13 @@ class MyApp extends StatelessWidget {
           create: (post_perbaikan) => PostPerbaikanCubit(myRepository: myRepository),
         ),
         BlocProvider(
+          create: (review_perbaikan) => ReviewPerbaikanCubit(myRepository: myRepository),
+        ),
+        BlocProvider(
           create: (riwayat_perbaikan) => RiwayatPerbaikanCubit(myRepository: myRepository),
+        ),
+        BlocProvider(
+          create: (detail_riwayat_perbaikan) => DetailRiwayatPerbaikanCubit(myRepository: myRepository),
         ),
         BlocProvider(
           create: (ket_mesin) => KetMesinCubit(myRepository: myRepository),
@@ -88,6 +103,15 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (detail_edit_perawatan) => EditDetailTaskPerawatanCubit(myRepository: myRepository),
+        ),
+        BlocProvider(
+          create: (history_perawatan) => RiwayatPerawatanCubit(myRepository: myRepository),
+        ),
+        BlocProvider(
+          create: (mesin_history_perawatan) => MesinHistoryPerawatanCubit(myRepository: myRepository),
+        ),
+        BlocProvider(
+          create: (review_perawatan) => ReviewPerawatanCubit(myRepository: myRepository),
         ),
       ],
       child: MaterialApp(

@@ -32,13 +32,13 @@ class _InfoMesinPerbaikanState extends State<InfoMesinPerbaikan> {
     final argument = (ModalRoute.of(context)?.settings.arguments) as Map;
     print("ARGUMENT: $argument");
     id_mesin = argument['id_mesin'];
-    BlocProvider.of<KetMesinCubit>(context).getMesin(id_mesin);
+    // BlocProvider.of<KetMesinCubit>(context).getMesin(id_mesin);
     BlocProvider.of<MesinHistoryPerbaikanCubit>(context).getMesinHistoryPerbaikan(id_mesin);
     return Scaffold(
       appBar: AppBar(
         title: Text('Informasi Mesin Perbaikan'),
       ),
-      body: Column(
+      body: ListView(
         children: [
           BlocBuilder<KetMesinCubit, KetMesinState>(
             builder: (context, state) {
@@ -158,6 +158,7 @@ class _InfoMesinPerbaikanState extends State<InfoMesinPerbaikan> {
                 );
               }
               var data = (state as MesinHistoryPerbaikanLoaded).data;
+              var json = (state as MesinHistoryPerbaikanLoaded).json;
               final DataTableSource pageTable = MyData(pageTable: data);
               if (data!.isEmpty) {
                 return Container(
@@ -168,73 +169,44 @@ class _InfoMesinPerbaikanState extends State<InfoMesinPerbaikan> {
               list.add(data);
               print('List;:: $data');
               // return Text(data.toString());
+              int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
+              int _rowsPerPage1 = PaginatedDataTable.defaultRowsPerPage;
+              var tableItemsCount = json['total_records'];
+              var defaultRowsPerPage = PaginatedDataTable.defaultRowsPerPage;
+              var isRowCountLessDefaultRowsPerPage = tableItemsCount < defaultRowsPerPage;
+              _rowsPerPage = isRowCountLessDefaultRowsPerPage ? tableItemsCount : defaultRowsPerPage;
               return Expanded(
                 child: ListView(
-                  
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
                   children: [
-                    PaginatedDataTable(
-                      columnSpacing: 100,
-                      horizontalMargin: 10,
-                      rowsPerPage: 8,
-                      showCheckboxColumn: false,
-                      dataRowHeight: 100,
-                      columns: const [
-                        DataColumn(label: Text("Tanggal")),
-                        DataColumn(label: Text("Ket. Kerusakan")),
-                        DataColumn(label: Text("Komponen")),
-                        DataColumn(label: Text("Material")),
-                        DataColumn(label: Text("Jumlag")),
-                        DataColumn(label: Text("Catatan")),
-                      ],
-                      source: pageTable,
+                    Container(
+                      margin: const EdgeInsets.all(3.0),
+                      // padding: const EdgeInsets.all(8.0),
+                      child: PaginatedDataTable(
+                        rowsPerPage: !isRowCountLessDefaultRowsPerPage ? _rowsPerPage : _rowsPerPage1,
+                        dataRowHeight: 80,
+                        showCheckboxColumn: false,
+                        onRowsPerPageChanged:isRowCountLessDefaultRowsPerPage?null: ((value) {
+                          setState(() {
+                            _rowsPerPage1 = value!;
+                          });
+                        }),
+                        columns: const [
+                          DataColumn(label: Text("No")),
+                          DataColumn(label: Text("Tanggal")),
+                          DataColumn(label: Text("Ket. Kerusakan")),
+                          DataColumn(label: Text("Komponen")),
+                          DataColumn(label: Text("Material")),
+                          DataColumn(label: Text("Jumlag")),
+                          DataColumn(label: Text("Catatan")),
+                        ],
+                        source: pageTable,
+                      ),
                     ),
                   ],
                 ),
               );
-              // return SingleChildScrollView(
-              //   scrollDirection: Axis.horizontal,
-              //   child: Container(
-              //     child: DataTable(
-              //       dataRowHeight: 80.0,
-              //       dividerThickness: 2.0,
-              //       showBottomBorder: true,
-              //       sortColumnIndex: 0,
-              //       sortAscending: true,
-              //       showCheckboxColumn: true,
-              //       columns: const [
-              //         // DataColumn(label: Text('No')),
-              //         DataColumn(label: Text('Tanggal')),
-              //         DataColumn(label: Text('Ket. Kerusakan')),
-              //         DataColumn(label: Text('Komponen')),
-              //         DataColumn(label: Text('Material')),
-              //         DataColumn(label: Text('Jumlah')),
-              //         DataColumn(label: Text('Catatan')),
-              //       ],
-              //       rows: data
-              //           .map((e) => DataRow(cells: [
-              //                 DataCell(
-              //                   Text(e['tgl_penanganan'].toString()),
-              //                 ),
-              //                 DataCell(
-              //                   Text(e['keterangan_permintaan'].toString()),
-              //                 ),
-              //                 DataCell(
-              //                   Text(e['komponen'].toString()),
-              //                 ),
-              //                 DataCell(
-              //                   Text(e['nama_material'].toString()),
-              //                 ),
-              //                 DataCell(
-              //                   Text(e['jumlah'].toString()),
-              //                 ),
-              //                 DataCell(
-              //                   Text(e['catatan_perbaikan_maintainer'].toString()),
-              //                 ),
-              //               ]))
-              //           .toList(),
-              //     ),
-              //   ),
-              // );
             },
           ),
         ],
@@ -257,6 +229,7 @@ class MyData extends DataTableSource {
   @override
   DataRow getRow(int index) {
     return DataRow(cells: [
+      DataCell(Text('${index+1}')),
       DataCell(Text(pageTable![index]['tgl_penanganan'].toString())),
       DataCell(Text(pageTable![index]["keterangan_permintaan"])),
       DataCell(Text(pageTable![index]["komponen"].toString())),

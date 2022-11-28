@@ -13,6 +13,10 @@ class MyApi {
     return "$baseUrl/api/v1/mobile-app/mt/task-list?email=${email}";
   }
 
+  static getProfile(email) {
+    return '$baseUrl/api/v1/mobile-app/mt/my-profile?email=$email';
+  }
+
   static getTreeView(id_perbaikan) {
     return "$baseUrl/api/v1/mobile-app/mt/struktur-mesin?id=${id_perbaikan}";
   }
@@ -22,6 +26,9 @@ class MyApi {
   static getKetMesin(id_mesin){
     return "$baseUrl/api/v1/mobile-app/mt/mesin?id_mesin=${id_mesin}";
   }
+  static masterMesin(id_mesin){
+    return '$baseUrl/api/v1/mobile-app/mt/mesin?id_mesin=$id_mesin';
+  }
 
   // PERBAIKAN
   static postPerbaikan(){
@@ -29,6 +36,12 @@ class MyApi {
   }
   static riwayat_perbaikan(email,page,per_page){
     return "$baseUrl/api/v1/mobile-app/mt/history-perbaikan?email=${email}&page=$page&per_page=$per_page";
+  }
+  static riview_perbaikan(id_delegasi){
+    return "$baseUrl/api/v1/mobile-app/mt/review-perbaikan?id_delegasi=$id_delegasi";
+  }
+  static getDetailHistoryPerbaikan(id_penanganan){
+    return "$baseUrl/api/v1/mobile-app/mt/detail-history-perbaikan?id_penanganan=$id_penanganan";
   }
   static mesin_history_perbaikan(id_mesin,page,per_page){
     return "$baseUrl/api/v1/mobile-app/mt/mesin-history-perbaikan?id_mesin=2021030733&page=1&per_page=5";
@@ -49,5 +62,11 @@ class MyApi {
   }
   static showPerawatan(id_delegasi){
     return "$baseUrl/api/v1/mobile-app/mt/show-perawatan?id_delegasi=$id_delegasi";
+  }
+  static history_perawatan(email,page,per_page){
+    return "$baseUrl/api/v1/mobile-app/mt/history-perawatan?email=$email&page=$page&per_page=$per_page";
+  }
+  static mesin_history_perawatan(id_mesin,page,per_page){
+    return '$baseUrl/api/v1/mobile-app/mt/mesin-history-perawatan?id_mesin=$id_mesin&page=$page&per_page=$per_page';
   }
 }

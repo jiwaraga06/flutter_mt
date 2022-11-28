@@ -11,13 +11,13 @@ class EditDetailTaskPerawatanCubit extends Cubit<EditDetailTaskPerawatanState> {
   final MyRepository? myRepository;
   EditDetailTaskPerawatanCubit({required this.myRepository}) : super(EditDetailTaskPerawatanInitial());
 
-  void getDetailTaskPerawatan() async {
+  void editDetailTaskPerawatan(kode_penugasan)async {
     emit(EditDetailTaskPerawatanLoading());
     SharedPreferences pref = await SharedPreferences.getInstance();
     var kode_penugasan = pref.getString('kode_penugasan');
     print(kode_penugasan);
 
-    myRepository!.getDetailTaskPerawatan(kode_penugasan).then((value) {
+    myRepository!.editDetailTaskPerawatan(kode_penugasan).then((value) {
       var json = jsonDecode(value.body);
       print("JSON: $json");
       print("JSON Code: ${value.statusCode}");

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_mt/source/data/Mesin/cubit/ket_mesin_cubit.dart';
 import 'package:flutter_mt/source/data/Perawatan/cubit/detail_task_perawatan_cubit.dart';
 import 'package:flutter_mt/source/data/Perawatan/cubit/post_perawatan_cubit.dart';
 import 'package:flutter_mt/source/data/Perawatan/cubit/save_perawatan_cubit.dart';
 import 'package:flutter_mt/source/widget/custom_banner.dart';
 import 'package:flutter_mt/source/widget/custom_button2.dart';
 import 'package:flutter_mt/source/widget/custom_loading.dart';
-import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
-import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class AddPerawatan extends StatefulWidget {
   const AddPerawatan({super.key});
@@ -38,11 +37,21 @@ class _AddPerawatanState extends State<AddPerawatan> {
         };
         detail_List.add(body);
       });
+        SnackBar snackBar = SnackBar(
+          backgroundColor: Colors.green[700],
+          content: Text('Berhasil Memilih kolom'),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else {
       setState(() {
         selected_paket!.removeWhere((element) => element == valSub['id_sub']);
         detail_List.removeWhere((element) => element['id_sub_paket'] == valSub['id_sub']);
       });
+        SnackBar snackBar = SnackBar(
+          backgroundColor: Colors.red[700],
+          content: Text('Berhasil Hapus Kolom'),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       print(selected_paket);
     }
   }
@@ -60,8 +69,8 @@ class _AddPerawatanState extends State<AddPerawatan> {
         title: Text('Add Perawatan'),
       ),
       body: BlocListener<PostPerawatanCubit, PostPerawatanState>(
-        listener: (context, state)async {
-            if (state is PostPerawatanLoading) {
+        listener: (context, state) async {
+          if (state is PostPerawatanLoading) {
             showDialog(
                 context: context,
                 barrierDismissible: false,
@@ -69,17 +78,17 @@ class _AddPerawatanState extends State<AddPerawatan> {
                   return const CustomLoading();
                 });
           }
-          if(state is PostPerawatanLoaded){
+          if (state is PostPerawatanLoaded) {
             Navigator.of(context).pop();
-             var json = state.json;
+            var json = state.json;
             var statusCode = state.statusCode;
             if (statusCode == 200) {
               final materialBanner = MyBanner.bannerSuccess(json['message']);
               ScaffoldMessenger.of(context)
                 ..hideCurrentMaterialBanner()
                 ..showSnackBar(materialBanner);
-                await Future.delayed(Duration(seconds: 1));
-                Navigator.of(context).pop();
+              await Future.delayed(Duration(seconds: 1));
+              Navigator.of(context).pop();
             } else {
               final materialBanner = MyBanner.bannerFailed('${json['message']} \n ${json['errors']}');
               ScaffoldMessenger.of(context)
@@ -227,7 +236,13 @@ class _AddPerawatanState extends State<AddPerawatan> {
                           ],
                         );
                       } else {
-                        return Container(child: Text(data['message']));
+                        return Container(
+                            child: Column(
+                          children: [
+                            Text(data['message']),
+                            Text(data['errors']['id_delegasi'].toString()),
+                          ],
+                        ));
                       }
                     },
                   ),

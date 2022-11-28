@@ -18,13 +18,35 @@ class MyNetwork {
     }
   }
 
+  Future getProfile(email) async {
+    try {
+      var url = Uri.parse(MyApi.getProfile(email));
+      var response = await http.get(url, headers: {
+        'Authorization': MyApi.token()
+      });
+      return response;
+    } catch (e) {
+      print('ERROR NETWORK PROFILE: $e');
+      
+    }
+  }
+
+  Future masterMesin(id_mesin) async {
+    try {
+      var url = Uri.parse(MyApi.masterMesin(id_mesin));
+      var response = await http.get(url, headers: {'Authorization': MyApi.token()});
+      return response;
+    } catch (e) {
+      print('ERROR NETWORK MASTER MESIN: \N $e');
+    }
+  }
+
   // TASK LIST PERBAIKAN & PERAWATAN
 
   Future getTaskPerbaikanPerawatan(email) async {
     try {
       var url = Uri.parse(MyApi.getTaskPerbaikanPerawatan(email));
-      var response =
-          await http.get(url, headers: {'Authorization': MyApi.token()});
+      var response = await http.get(url, headers: {'Authorization': MyApi.token()});
       return response;
     } catch (e) {
       print("ERROR NETWORK perbaikan&perawatan: $e");
@@ -34,8 +56,7 @@ class MyNetwork {
   Future getTreeView(id_perbaikan) async {
     try {
       var url = Uri.parse(MyApi.getTreeView(id_perbaikan));
-      var response =
-          await http.get(url, headers: {'Authorization': MyApi.token()});
+      var response = await http.get(url, headers: {'Authorization': MyApi.token()});
       return response;
     } catch (e) {
       print("ERROR NETWORK treeview: $e");
@@ -45,8 +66,7 @@ class MyNetwork {
   Future getMaterial(id_perbaikan) async {
     try {
       var url = Uri.parse(MyApi.getMaterial(id_perbaikan));
-      var response =
-          await http.get(url, headers: {'Authorization': MyApi.token()});
+      var response = await http.get(url, headers: {'Authorization': MyApi.token()});
       return response;
     } catch (e) {
       print("ERROR NETWORK material: $e");
@@ -110,10 +130,29 @@ class MyNetwork {
     }
   }
 
+  Future getReviewPerbaikan(id_delegasi) async {
+    try {
+      var url = Uri.parse(MyApi.riview_perbaikan(id_delegasi));
+      var response = await http.get(url, headers: {'Authorization': MyApi.token()});
+      return response;
+    } catch (e) {
+      print('ERROR NETWORK REVIEW PERBAIKAN: $e');
+    }
+  }
+
+  Future getDetailRiwayatPerbaikan(id_penanganan) async {
+    try {
+      var url = Uri.parse(MyApi.getDetailHistoryPerbaikan(id_penanganan));
+      var response = await http.get(url, headers: {'Authorization': MyApi.token(), 'Accept': 'application/json'});
+      return response;
+    } catch (e) {
+      print('ERROR NETWORK DETAIL_RIWAYAT_PERBAIKAN: \n $e');
+    }
+  }
+
   Future getMesinHistoryPerbaikan(id_mesin, page, per_page) async {
     try {
-      var url =
-          Uri.parse(MyApi.mesin_history_perbaikan(id_mesin, page, per_page));
+      var url = Uri.parse(MyApi.mesin_history_perbaikan(id_mesin, page, per_page));
       var response = await http.get(
         url,
         headers: {'Authorization': MyApi.token(), 'Accept': 'application/json'},
@@ -136,6 +175,19 @@ class MyNetwork {
 
   // PERAWATAN
   Future getDetailTaskPerawatan(id_delegasi) async {
+    try {
+      var url = Uri.parse(MyApi.detail_task_perawatan(id_delegasi));
+      var response = await http.get(url, headers: {
+        'Authorization': MyApi.token(),
+        'Accept': 'application/json',
+      });
+      return response;
+    } catch (e) {
+      print('ERROR NETWORK DETAIL TASK PERAWATAN : \n $e');
+    }
+  }
+
+  Future editDetailTaskPerawatan(id_delegasi) async {
     try {
       var url = Uri.parse(MyApi.showPerawatan(id_delegasi));
       var response = await http.get(url, headers: {
@@ -165,6 +217,7 @@ class MyNetwork {
       print('ERROR NETWORK POST PERAWATAN: $e');
     }
   }
+
   Future editPerawatan(body) async {
     try {
       var url = Uri.parse(MyApi.postPerawatan());
@@ -180,6 +233,36 @@ class MyNetwork {
       return response;
     } catch (e) {
       print('ERROR NETWORK EDIT PERAWATAN: $e');
+    }
+  }
+
+  Future historyPerawatan(email, page, per_page) async {
+    try {
+      var url = Uri.parse(MyApi.history_perawatan(email, page, per_page));
+      var response = await http.get(url, headers: {'Authorization': MyApi.token()});
+      return response;
+    } catch (e) {
+      print('ERROR NETWORK HISTORY PERAWATAN: $e');
+    }
+  }
+
+  Future mesin_history_perawatan(id_mesin, page, per_page) async {
+    try {
+      var url = Uri.parse(MyApi.mesin_history_perawatan(id_mesin, page, per_page));
+      var response = await http.get(url, headers: {'Authorization': MyApi.token()});
+      return response;
+    } catch (e) {
+      print('ERROR NETWORK MESIN HISTORY PERAWATAN: \n $e');
+    }
+  }
+
+  Future reviewPerawatan(id_delegasi) async {
+    try {
+      var url = Uri.parse(MyApi.reviewPerawatan(id_delegasi));
+      var response = await http.get(url, headers: {'Authorization': MyApi.token()});
+      return response;
+    } catch (e) {
+      print('ERROR NETWORK REVIEW PERAWATAN: \n $e');
     }
   }
 }

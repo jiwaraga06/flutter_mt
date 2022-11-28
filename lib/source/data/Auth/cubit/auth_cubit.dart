@@ -46,4 +46,9 @@ class AuthCubit extends Cubit<AuthState> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     var email = pref.getString('email');
   }
+  void keluarAkun(context) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.remove('email');
+    Navigator.pushNamedAndRemoveUntil(context, LOGIN, (route) => false);
+  }
 }

@@ -15,6 +15,11 @@ class MyRepository {
     return json;
   }
 
+  Future getProfile(email)async {
+    var json = await myNetwork!.getProfile(email);
+    return json;
+  }
+
   // TASK LIST PERBAIKAN DAN PERAWATAN
   Future getTaskPerbaikanPerawatan(email) async {
     var json = await myNetwork!.getTaskPerbaikanPerawatan(email);
@@ -34,7 +39,12 @@ class MyRepository {
     return json;
   }
 
-  Future getKetMesin(id_mesin) async{
+  Future masterMesin(id_mesin) async {
+    var json = await myNetwork!.masterMesin(id_mesin);
+    return json;
+  }
+
+  Future getKetMesin(id_mesin) async {
     var json = await myNetwork!.getKetMesin(id_mesin);
     return json;
   }
@@ -43,6 +53,7 @@ class MyRepository {
     var json = await myNetwork!.postPerbaikan(body);
     return json;
   }
+
   Future editPerbaikan(body) async {
     var json = await myNetwork!.editPerbaikan(body);
     return json;
@@ -53,12 +64,22 @@ class MyRepository {
     return json;
   }
 
+  Future getReviewPerbaikan(id_delegasi) async {
+    var json = await myNetwork!.getReviewPerbaikan(id_delegasi);
+    return json;
+  }
+
+  Future getDetailRiwayatPerbaikan(id_penanganan) async {
+    var json = await myNetwork!.getDetailRiwayatPerbaikan(id_penanganan);
+    return json;
+  }
+
   Future getMesinHistoryPerbaikan(id_mesin, page, per_page) async {
     var json = await myNetwork!.getMesinHistoryPerbaikan(id_mesin, page, per_page);
     return json;
   }
 
-  Future getShowPerbaikan(id_delegasi)async {
+  Future getShowPerbaikan(id_delegasi) async {
     var json = await myNetwork!.getShowPerbaikan(id_delegasi);
     return json;
   }
@@ -68,12 +89,33 @@ class MyRepository {
     return json;
   }
 
-  Future postPerawatan(body)async {
+  Future editDetailTaskPerawatan(id_delegasi) async {
+    var json = await myNetwork!.editDetailTaskPerawatan(id_delegasi);
+    return json;
+  }
+
+  Future postPerawatan(body) async {
     var json = await myNetwork!.postPerawatan(body);
     return json;
   }
-  Future editPerawatan(body)async {
+
+  Future editPerawatan(body) async {
     var json = await myNetwork!.editPerawatan(body);
+    return json;
+  }
+
+  Future historyPerawatan(email, page, per_page) async {
+    var json = await myNetwork!.historyPerawatan(email, page, per_page);
+    return json;
+  }
+
+  Future mesin_history_perawatan(id_mesin, page, per_page) async {
+    var json = await myNetwork!.mesin_history_perawatan(id_mesin, page, per_page);
+    return json;
+  }
+
+  Future reviewPerawatan(id_delegasi) async {
+    var json = await myNetwork!.reviewPerawatan(id_delegasi);
     return json;
   }
 }

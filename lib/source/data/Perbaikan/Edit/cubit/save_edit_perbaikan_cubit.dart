@@ -17,8 +17,8 @@ class SaveEditPerbaikanCubit extends Cubit<SaveEditPerbaikanState> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     var email = pref.getString("email");
     var body = {
-      'id_penanganan_perbaikan': id_penangan_perbaikan,
       'email': email,
+      'id_penanganan_perbaikan': id_penangan_perbaikan,
       'detail_perbaikan': detail_perbaikan,
     };
     var encode = jsonEncode(body);

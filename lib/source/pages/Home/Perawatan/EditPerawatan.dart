@@ -15,7 +15,7 @@ class EditPerawatan extends StatefulWidget {
 }
 
 class _EditPerawatanState extends State<EditPerawatan> {
-  var id_struktur_mesin, id_paket_perawatan,id_penanganan_perawatan;
+  var id_struktur_mesin, id_paket_perawatan, id_penanganan_perawatan;
   var kode_penugasan;
   var perawatan = [];
   var sub_perawatan = [];
@@ -24,7 +24,7 @@ class _EditPerawatanState extends State<EditPerawatan> {
 
   void save(id_penanganan_perawatan) {
     print(detail_List);
-    BlocProvider.of<EditPerawatanCubit>(context).editPenanganan(id_penanganan_perawatan,detail_List.toList());
+    BlocProvider.of<EditPerawatanCubit>(context).editPenanganan(id_penanganan_perawatan, detail_List.toList());
   }
 
   void adding(valSub) {
@@ -38,29 +38,41 @@ class _EditPerawatanState extends State<EditPerawatan> {
         };
         detail_List.add(body);
       });
+        SnackBar snackBar = SnackBar(
+          backgroundColor: Colors.green[700],
+          content: Text('Berhasil Hapus Kolom'),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else {
       setState(() {
         selected_paket!.removeWhere((element) => element == valSub['id_sub']);
         detail_List.removeWhere((element) => element['id_sub_paket'] == valSub['id_sub']);
       });
       print(selected_paket);
+        SnackBar snackBar = SnackBar(
+          backgroundColor: Colors.red[700],
+          content: Text('Berhasil Hapus Kolom'),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<EditDetailTaskPerawatanCubit>(context).getDetailTaskPerawatan();
   }
 
   @override
   Widget build(BuildContext context) {
+    final argument = ModalRoute.of(context)!.settings.arguments as Map;
+    print(argument);
+    BlocProvider.of<EditDetailTaskPerawatanCubit>(context).editDetailTaskPerawatan(argument['id_delegasi']);
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Perawatan'),
       ),
       body: BlocListener<EditPerawatanCubit, EditPerawatanState>(
-        listener: (context, state)async {
+        listener: (context, state) async {
           if (state is EditPerawatanLoading) {
             showDialog(
                 context: context,
@@ -78,8 +90,8 @@ class _EditPerawatanState extends State<EditPerawatan> {
               ScaffoldMessenger.of(context)
                 ..hideCurrentMaterialBanner()
                 ..showSnackBar(materialBanner);
-                await Future.delayed(Duration(seconds: 1));
-                Navigator.of(context).pop();
+              await Future.delayed(Duration(seconds: 1));
+              Navigator.of(context).pop();
             } else {
               final materialBanner = MyBanner.bannerFailed('${json['message']} \n ${json['errors']}');
               ScaffoldMessenger.of(context)
@@ -124,32 +136,7 @@ class _EditPerawatanState extends State<EditPerawatan> {
                           ));
                     },
                   ),
-                  BlocConsumer<EditDetailTaskPerawatanCubit, EditDetailTaskPerawatanState>(
-                    listener: (context, state) {
-                      if (state is EditDetailTaskPerawatanLoaded) {
-                        var json = state.json;
-                        print('Result\n $json');
-                        setState(() {
-                        id_penanganan_perawatan=json['id_penanganan_perawatan'];
-                          json['detail_penugasan'].forEach((a) {
-                            a['perawatan'].forEach((b) {
-                              b['sub_perawatan'].forEach((c) {
-                                if (c['is_checked'] == true) {
-                                  var body = {
-                                    "id_struktur_mesin": a['id_struktur_mesin'],
-                                    "id_paket_perawatan": b['id_paket_perawatan'],
-                                    'id_sub_paket': c['id_sub'],
-                                  };
-                                  detail_List.add(body);
-                                  selected_paket!.add(c['id_sub']);
-                                }
-                              });
-                            });
-                          });
-                          print('Detail LIst: $detail_List');
-                        });
-                      }
-                    },
+                  BlocBuilder<EditDetailTaskPerawatanCubit, EditDetailTaskPerawatanState>(
                     builder: (context, state) {
                       if (state is EditDetailTaskPerawatanLoading) {
                         return SizedBox(
@@ -172,6 +159,25 @@ class _EditPerawatanState extends State<EditPerawatan> {
                           child: Center(child: Text("Data Kosong")),
                         );
                       }
+                      print("dataaaaaaaa");
+                      print(data);
+                       id_penanganan_perawatan = data['id_penanganan_perawatan'];
+                        data['detail_penugasan'].forEach((a) {
+                          a['perawatan'].forEach((b) {
+                            b['sub_perawatan'].forEach((c) {
+                              if (c['is_checked'] == true) {
+                                var body = {
+                                  "id_struktur_mesin": a['id_struktur_mesin'],
+                                  "id_paket_perawatan": b['id_paket_perawatan'],
+                                  'id_sub_paket': c['id_sub'],
+                                };
+                                detail_List.add(body);
+                                selected_paket!.add(c['id_sub']);
+                              }
+                            });
+                          });
+                        });
+                        print('Detail LIst: $detail_List');
                       if (status == 200) {
                         return Column(
                           children: [

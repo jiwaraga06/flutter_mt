@@ -9,5 +9,6 @@ class RiwayatPerbaikanLoading extends RiwayatPerbaikanState {}
 
 class RiwayatPerbaikanLoaded extends RiwayatPerbaikanState {
   dynamic json;
-  RiwayatPerbaikanLoaded({this.json});
+  final int? statusCode;
+  RiwayatPerbaikanLoaded({this.json, this.statusCode});
 }
