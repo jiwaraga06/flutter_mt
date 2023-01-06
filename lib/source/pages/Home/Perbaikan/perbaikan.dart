@@ -308,7 +308,19 @@ class _PerbaikanState extends State<Perbaikan> with SingleTickerProviderStateMix
                     child: Text("Data kosong"),
                   );
                 }
+
                 if (statusCode == 200) {
+                  if (data['perbaikan']!.isEmpty) {
+                    return InkWell(
+                      onTap: () {
+                        BlocProvider.of<PerbaikanCubit>(context).getPerbaikan();
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Text("Tidak Ada Data \n ketuk layar untuk refresh"),
+                      ),
+                    );
+                  }
                   return SmartRefresher(
                     controller: _refreshController,
                     onRefresh: () {

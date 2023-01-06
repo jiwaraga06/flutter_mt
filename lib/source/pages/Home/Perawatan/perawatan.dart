@@ -163,6 +163,7 @@ class _PerawatanState extends State<Perawatan> with SingleTickerProviderStateMix
     final curvedAnimation = CurvedAnimation(curve: Curves.easeOut, parent: _animationController!);
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
     BlocProvider.of<PerawatanCubit>(context).getPerawatan();
+    BlocProvider.of<ProfileCubit>(context).getProfile();
   }
 
   @override
@@ -305,10 +306,12 @@ class _PerawatanState extends State<Perawatan> with SingleTickerProviderStateMix
                 var statusCode = (state as PerawatanLoaded).statusCode;
                 if (data['perawatan']!.isEmpty) {
                   return InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      BlocProvider.of<PerawatanCubit>(context).getPerawatan();
+                    },
                     child: Container(
                       alignment: Alignment.center,
-                      child: Text("Tidak Ada Data"),
+                      child: Text("Tidak Ada Data \n ketuk layar untuk refresh"),
                     ),
                   );
                 }
